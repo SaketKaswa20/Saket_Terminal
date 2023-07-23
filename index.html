@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Terminal</title>
+    <!-- Include Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Additional custom styles for the terminal */
+        body {
+            background-color: #000000; /* Deep black background */
+            color: #39ff14; /* Neon green text color */
+        }
+        .terminal {
+            font-family: Menlo, monospace;
+            max-height: 500px;
+            overflow-y: auto;
+            overflow-x: hidden; /* Hide horizontal scrollbar */
+            background-color: #000000; /* Deep black background */
+            color: #39ff14; /* Neon green text color */
+            position: relative;
+            padding-top: 30px; /* Add vertical space between buttons and prompt */
+            scrollbar-color: #39ff14 #000000; /* Neon green thumb and black track for Firefox */
+        }
+        /* Styling the scrollbar for WebKit-based browsers */
+        .terminal::-webkit-scrollbar {
+            width: 10px;
+        }
+        .terminal::-webkit-scrollbar-thumb {
+            background-color: #39ff14; /* Neon green thumb */
+            border-radius: 5px;
+        }
+        .terminal::-webkit-scrollbar-track {
+            background-color: #000000; /* Black track */
+        }
+        .terminal-input {
+            background-color: transparent;
+            color: #39ff14; /* Neon green text color */
+        }
+        .mac-button {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .red {
+            background-color: #ff4d4f; /* Red */
+        }
+        .yellow {
+            background-color: #ffd666; /* Yellow */
+        }
+        .green {
+            background-color: #73d13d; /* Green */
+        }
+        .mac-buttons {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            display: flex;
+            justify-content: flex-start; /* Align buttons to the left */
+            align-items: center;
+        }
+        .command-line {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex flex-col justify-center items-center h-screen">
+        <div class="terminal rounded-lg border border-gray-500 p-4 w-full">
+            <!-- Macbook-like buttons at the top left corner of the terminal -->
+            <div class="mac-buttons">
+                <div class="mac-button red"></div>
+                <div class="mac-button yellow"></div>
+                <div class="mac-button green"></div>
+            </div>
+            <!-- Display the message when the terminal is initialized -->
+            <pre id="terminal-output">$ saket-kaswa >> To know the commands use the 'help' command</pre>
+            <pre id="terminal-input-output"></pre>
+            <div class="flex">
+                <span class="terminal-input flex-none mr-2">$ saket-kaswa &gt;&gt;</span>
+                <input id="terminal-input" type="text" class="flex-grow bg-transparent focus:outline-none">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const terminalOutput = document.getElementById("terminal-input-output");
+        const terminalInput = document.getElementById("terminal-input");
+        const prompt = "$ saket-kaswa >> ";
+
+        terminalInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                const command = terminalInput.value.trim(); // Trim any leading/trailing whitespace
+                terminalInput.value = "";
+
+                // Ignore empty commands
+                if (command === "") {
+                    terminalOutput.innerHTML += `<div class="command-line">${prompt}</div>`;
+                    return;
+                }
+
+                // Handle the "clear" command
+                if (command.toLowerCase() === "clear") {
+                    terminalOutput.textContent = '';
+                    return;
+                }
+
+                // Handle the "exit" command
+                if (command.toLowerCase() === "exit") {
+                    updateTerminal("Hope you got the required info about Saket !");
+                    return;
+                }
+
+                // Handle the "whoami" command
+                if (command.toLowerCase() === "whoami") {
+                    updateTerminal(`${prompt}${command}\nSaket Kaswa`);
+                    return;
+                }
+
+                // Handle the "github" command
+                if (command.toLowerCase() === "github") {
+                    openLink("https://github.com/SaketKaswa20");
+                    return;
+                }
+
+                // Handle the "linkedin" command
+                if (command.toLowerCase() === "linkedin") {
+                    openLink("https://www.linkedin.com/in/saket-kaswa/");
+                    return;
+                }
+
+                // Handle the "cd" command
+                if (command.toLowerCase() === "cd") {
+                    updateTerminal(`${prompt}${command}\nPune, Maharashtra`);
+                    return;
+                }
+
+                // Handle the "saket --version" command
+                if (command.toLowerCase() === "saket --version") {
+                    updateTerminal(`${prompt}${command}\n20`);
+                    return;
+                }
+
+                // Handle the "saket --education" command
+                if (command.toLowerCase() === "saket --education") {
+                    updateTerminal(`${prompt}${command}\n3rd Year Undergraduate Student at COEP Technological University`);
+                    return;
+                }
+
+                // Handle the "mail" command
+                if (command.toLowerCase() === "mail") {
+                    openLink("mailto:kaswasd21.coep@gmail.com");
+                    return;
+                }
+
+                // Handle the "help" command
+                if (command.toLowerCase() === "help") {
+                    const helpMessage = `
+Available Commands:
+- whoami: Displays my name
+- clear: Clear the terminal screen.
+- exit: Exit the terminal with a message
+- github: Will take to my GitHub Profile
+- linkedin: Will take to my LinkedIn Profile
+- cd: Shows my current location 
+- saket --version: Display my current age 
+- saket --education: Displays my current education status
+- mail: Should open mail app and start writing a mail to kaswasd21.coep@gmail.com
+- help: Show available commands and their descriptions.
+`;
+                    updateTerminal(`${prompt}${command}\n${helpMessage}`);
+                    return;
+                }
+
+                // Command not recognized
+                updateTerminal(`${prompt}${command}\nCommand not recognized: ${command}`);
+            }
+        });
+
+        function updateTerminal(output) {
+            terminalOutput.innerHTML += `<div class="command-line">${output}</div>`;
+        }
+
+        function openLink(url) {
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
